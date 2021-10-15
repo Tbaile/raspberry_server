@@ -1,0 +1,38 @@
+version: '3.5'
+services:
+  app:
+    image: 'jc21/nginx-proxy-manager:latest'
+    restart: unless-stopped
+    depends_on:
+      - db
+    # For security reasons, only inside the host the port 81 is available.
+    ports:
+      - '80:80'
+      - '443:443'
+      - '127.0.0.1:81:81'
+    environment:
+      DB_MYSQL_HOST: 'db'
+      DB_MYSQL_PORT: 3306
+      DB_MYSQL_USER: 'nginx_proxy_manager'
+      DB_MYSQL_PASSWORD: 'nginx_proxy_manager'
+      DB_MYSQL_NAME: 'nginx_proxy_manager'
+    volumes:
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+    networks:
+      - default
+      - nginx
+  db:
+    image: 'mariadb:10'
+    restart: unless-stopped
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: true
+      MYSQL_DATABASE: 'nginx_proxy_manager'
+      MYSQL_USER: 'nginx_proxy_manager'
+      MYSQL_PASSWORD: 'nginx_proxy_manager'
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+
+networks:
+  nginx:
+    external: true
