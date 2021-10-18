@@ -1,0 +1,14 @@
+global:
+  smtp_from: '<smtp_email_from>'
+  smtp_smarthost: '<smtp_host>'
+  smtp_auth_username: '<smtp_username>'
+  smtp_auth_password: '<smtp_password>'
+
+route:
+    receiver: 'mail'
+
+receivers:
+    - name: 'mail'
+      email_configs:
+          - send_resolved: true
+            to: '<email_address>'
