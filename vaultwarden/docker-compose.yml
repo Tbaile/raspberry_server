@@ -4,10 +4,10 @@ services:
   vaultwarden:
     image: 'vaultwarden/server:latest'
     container_name: vaultwarden
-    env_file:
-      - .env
     volumes:
       - data:/data
+    env_file:
+      - .env
     networks:
       - nginx
 
