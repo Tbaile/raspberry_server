@@ -7,7 +7,7 @@ services:
     env_file:
       - .env
     volumes:
-      - vaultwarden_data:/data
+      - data:/data
     networks:
       - nginx
 
@@ -16,4 +16,4 @@ networks:
     external: true
 
 volumes:
-  vaultwarden_data:
+  data:
