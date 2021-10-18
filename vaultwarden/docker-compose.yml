@@ -1,0 +1,19 @@
+version: '3.5'
+
+services:
+  vaultwarden:
+    image: 'vaultwarden/server:latest'
+    container_name: vaultwarden
+    env_file:
+      - .env
+    volumes:
+      - vaultwarden_data:/data
+    networks:
+      - nginx
+
+networks:
+  nginx:
+    external: true
+
+volumes:
+  vaultwarden_data:

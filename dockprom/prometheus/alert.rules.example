@@ -63,3 +63,11 @@ groups:
     annotations:
       summary: "Portainer not running"
       description: "Portainer is not running, access through gui is impossible."
+  - alert: vaultwarden_offline
+    expr: absent(container_memory_usage_bytes{name="vaultwarden"})
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Vaultwarden not running"
+      description: "Portainer is not running, password manager offline."
