@@ -40,7 +40,7 @@ services:
     image: 'mariadb:10'
     restart: unless-stopped
     environment:
-      MYSQL_RANDOM_ROOT_PASSWORD: true
+      MYSQL_RANDOM_ROOT_PASSWORD: 'true'
       MYSQL_DATABASE: 'nginx_proxy_manager'
       MYSQL_USER: 'nginx_proxy_manager'
       MYSQL_PASSWORD: 'nginx_proxy_manager'

@@ -92,8 +92,6 @@ services:
       org.label-schema.group: "monitoring"
 
 networks:
-  nginx:
-    external: true
   monitoring:
     external: true
 
