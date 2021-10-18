@@ -49,9 +49,17 @@ groups:
       description: "Proxy Server is offline."
   - alert: watchtower_offline
     expr: absent(container_memory_usage_bytes{name="watchtower"})
-    for: 30s
+    for: 10m
     labels:
       severity: warning
     annotations:
       summary: "Watchtower not running"
       description: "Watchtower is not running in the system, automatic image update is not available."
+  - alert: portainer_offline
+    expr: absent(container_memory_usage_bytes{name="portainer"})
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Portainer not running"
+      description: "Portainer is not running, access through gui is impossible."
