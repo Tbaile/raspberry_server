@@ -1,0 +1,41 @@
+version: '3.5'
+
+services:
+  app:
+    image: 'nextcloud'
+    restart: unless-stopped
+    depends_on:
+      - database
+    volumes:
+      - data:/var/www/html
+    env_file:
+      - .env
+    environment:
+      MYSQL_HOST: database
+      MYSQL_DATABASE: nextcloud
+      MYSQL_USER: nextcloud
+      MYSQL_PASSWORD: nextcloud
+    networks:
+      - default
+      - nginx
+  database:
+    image: 'mariadb:10.5'
+    restart: unless-stopped
+    volumes:
+      - database:/var/lib/mysql
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: 'true'
+      MYSQL_DATABASE: nextcloud
+      MYSQL_USER: nextcloud
+      MYSQL_PASSWORD: nextcloud
+    command:
+      - '--transaction-isolation=READ-COMMITTED'
+      - '--binlog-format=ROW'
+
+networks:
+  nginx:
+    external: true
+
+volumes:
+  data:
+  database:
