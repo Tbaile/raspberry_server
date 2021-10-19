@@ -24,7 +24,7 @@
   "gnetId": null,
   "graphTooltip": 1,
   "id": 2,
-  "iteration": 1634653513707,
+  "iteration": 1634654755981,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -1541,8 +1541,8 @@
       {
         "current": {
           "selected": false,
-          "text": "",
-          "value": ""
+          "text": "ext4",
+          "value": "ext4"
         },
         "description": "",
         "error": null,
@@ -1551,12 +1551,12 @@
         "name": "fstype",
         "options": [
           {
-            "selected": false,
+            "selected": true,
             "text": "ext4",
             "value": "ext4"
           }
         ],
-        "query": "",
+        "query": "ext4",
         "skipUrlSync": false,
         "type": "textbox"
       }
@@ -1594,5 +1594,5 @@
   "timezone": "browser",
   "title": "Docker Host",
   "uid": "U6dXehd7z",
-  "version": 2
+  "version": 4
 }
