@@ -1,0 +1,82 @@
+version: '3.5'
+
+services:
+  jackett:
+    image: 'linuxserver/jackett'
+    restart: unless-stopped
+    ports:
+      - '9117:9117'
+    volumes:
+      - ./config/jackett:/config/Jackett
+    env_file:
+      - .env
+  transmission:
+    image: 'linuxserver/transmission'
+    restart: unless-stopped
+    ports: 
+      - '9091:9091'
+    volumes: 
+      - ./data:/mnt/data
+      - ./config/transmission:/config
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+    env_file:
+      - .env
+  sonarr:
+    image: 'linuxserver/sonarr'
+    restart: unless-stopped
+    depends_on:
+      - jackett
+      - transmission
+    ports:
+      - '8989:8989'
+    volumes:
+      - ./config/sonarr:/config
+      - ./data:/mnt/data
+    env_file:
+      - .env
+  radarr:
+    image: 'linuxserver/radarr'
+    restart: unless-stopped
+    depends_on:
+      - jackett
+      - transmission
+    ports:
+      - '7878:7878'
+    volumes:
+      - ./config/radarr:/config
+      - ./data:/mnt/data
+    env_file:
+      - .env
+  bazarr:
+    image: 'linuxserver/bazarr'
+    restart: unless-stopped
+    ports:
+      - '6767:6767'
+    volumes:
+      - ./config/bazarr:/config
+      - ./data/media/movies:/mnt/data/media/movies
+      - ./data/media/tv:/mnt/data/media/tv
+    env_file:
+      - .env
+  jellyfin:
+    image: 'linuxserver/jellyfin'
+    restart: unless-stopped
+    ports:
+      - '8096:8096'
+      - '8920:8920'
+      - '7359:7359/udp'
+      - '1900:1900/udp'
+    volumes:
+      - ./data/media:/mnt/media
+      - ./config/jellyfin:/config
+      - /opt/vc/lib:/opt/vc/lib
+    devices:
+      - /dev/vchiq:/dev/vchiq
+      - /dev/video10:/dev/video10
+      - /dev/video11:/dev/video11
+      - /dev/video12:/dev/video12
+    env_file:
+      - .env
