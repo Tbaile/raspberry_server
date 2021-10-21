@@ -25,6 +25,19 @@ services:
     networks:
       - default
       - nginx
+  nginx_exporter:
+    image: 'nginx/nginx-prometheus-exporter:0.9.0'
+    depends_on:
+      - nginx_proxy_manager
+    expose:
+      - '9113'
+    networks:
+      - monitoring
+      - nginx
+    command:
+      - '-nginx.scrape-uri=http://nginx_proxy_manager:8080/stub_status'
+    labels:
+      org.label-schema.group: "monitoring"
   db:
     image: 'mariadb:10'
     restart: unless-stopped
