@@ -1,0 +1,32 @@
+version: '3.5'
+
+services:
+  scheduler:
+    image: 'redis'
+    restart: unless-stopped
+  
+  paperless:
+    image: 'jonaswinkler/paperless-ng'
+    restart: unless-stopped
+    depends_on:
+      - scheduler
+    ports:
+     - '8000:8000'
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    volumes:
+      - data:/usr/src/paperless/data
+      - media:/usr/src/paperless/media
+      - ./export:/usr/src/paperless/export
+      - ./consume:/usr/src/paperless/consume
+    env_file:
+      - .env
+    environment:
+      PAPERLESS_REDIS: redis://scheduler:6379
+
+volumes:
+  data:
+  media:
