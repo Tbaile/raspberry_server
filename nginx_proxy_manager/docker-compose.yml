@@ -35,11 +35,11 @@ services:
     volumes:
       - database:/var/lib/mysql
 
+networks:
+  nginx:
+    external: true
+
 volumes:
   nginx:
   letsenctypt:
   database:
-
-networks:
-  nginx:
-    external: true
