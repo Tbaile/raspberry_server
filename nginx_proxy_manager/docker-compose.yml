@@ -7,11 +7,10 @@ services:
     restart: unless-stopped
     depends_on:
       - db
-    # For security reasons, only inside the host the port 81 is available.
     ports:
       - '80:80'
       - '443:443'
-      - '127.0.0.1:81:81'
+      - '81:81'
     environment:
       DB_MYSQL_HOST: 'db'
       DB_MYSQL_PORT: 3306
@@ -19,14 +18,14 @@ services:
       DB_MYSQL_PASSWORD: 'nginx_proxy_manager'
       DB_MYSQL_NAME: 'nginx_proxy_manager'
     volumes:
-      - ./data:/data
-      - ./letsencrypt:/etc/letsencrypt
+      - ./data/nginx:/data
+      - ./data/letsencrypt:/etc/letsencrypt
       - ./nginx:/data/nginx/custom
     networks:
       - default
       - nginx
   db:
-    image: 'mariadb:10'
+    image: 'mariadb:10.6'
     restart: unless-stopped
     environment:
       MYSQL_RANDOM_ROOT_PASSWORD: 'true'
