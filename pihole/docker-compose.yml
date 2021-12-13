@@ -1,0 +1,18 @@
+version: '3.5'
+
+services:
+  pihole:
+    image: 'pihole/pihole:latest'
+    container_name: pihole
+    restart: unless-stopped
+    ports:
+      - '53:53'
+      - '82:80'
+    volumes:
+      - pihole:/etc/pihole
+      - dnsmasq:/etc/dnsmasq.d
+    env_file: .env
+
+volumes:
+  pihole:
+  dnsmasq:
