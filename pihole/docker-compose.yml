@@ -6,8 +6,10 @@ services:
     container_name: pihole
     restart: unless-stopped
     ports:
-      - '53:53'
-      - '82:80'
+      - '53:53/tcp'
+      - '53:53/udp'
+      - '67:67/udp'
+      - '82:80/tcp'
     volumes:
       - pihole:/etc/pihole
       - dnsmasq:/etc/dnsmasq.d
