@@ -9,10 +9,12 @@ services:
       - '53:53/tcp'
       - '53:53/udp'
       - '67:67/udp'
-      - '82:80/tcp'
     volumes:
       - pihole:/etc/pihole
       - dnsmasq:/etc/dnsmasq.d
+    networks:
+      - default
+      - nginx
     env_file: .env
     environment:
       DNSMASQ_LISTENING: all
@@ -20,3 +22,7 @@ services:
 volumes:
   pihole:
   dnsmasq:
+
+networks:
+  nginx:
+    external: true
