@@ -3,21 +3,29 @@ version: '3.5'
 services:
   jackett:
     image: 'linuxserver/jackett'
+    container_name: jackett
     restart: unless-stopped
     ports:
       - '9117:9117'
     volumes:
       - jackett:/config/Jackett
+    networks:
+      - default
+      - nginx
     env_file:
       - .env
   transmission:
     image: 'linuxserver/transmission'
+    container_name: transmission
     restart: unless-stopped
     ports: 
       - '9091:9091'
     volumes: 
       - ./data:/mnt/data
       - transmission:/config
+    networks:
+      - default
+      - nginx
     logging:
       driver: json-file
       options:
@@ -26,6 +34,7 @@ services:
       - .env
   sonarr:
     image: 'linuxserver/sonarr'
+    container_name: sonarr
     restart: unless-stopped
     depends_on:
       - jackett
@@ -35,10 +44,14 @@ services:
     volumes:
       - sonarr:/config
       - ./data:/mnt/data
+    networks:
+      - default
+      - nginx
     env_file:
       - .env
   radarr:
     image: 'linuxserver/radarr'
+    container_name: radarr
     restart: unless-stopped
     depends_on:
       - jackett
@@ -48,10 +61,14 @@ services:
     volumes:
       - radarr:/config
       - ./data:/mnt/data
+    networks:
+      - default
+      - nginx
     env_file:
       - .env
   bazarr:
     image: 'linuxserver/bazarr'
+    container_name: bazarr
     restart: unless-stopped
     ports:
       - '6767:6767'
@@ -59,10 +76,14 @@ services:
       - bazarr:/config
       - ./data/media/movies:/mnt/data/media/movies
       - ./data/media/tv:/mnt/data/media/tv
+    networks:
+      - default
+      - nginx
     env_file:
       - .env
   jellyfin:
     image: 'linuxserver/jellyfin'
+    container_name: jellyfin
     restart: unless-stopped
     ports:
       - '8096:8096'
@@ -73,6 +94,9 @@ services:
       - ./data/media:/mnt/media
       - jellyfin:/config
       - /opt/vc/lib:/opt/vc/lib
+    networks:
+      - default
+      - nginx
     devices:
       - /dev/vchiq:/dev/vchiq
       - /dev/video10:/dev/video10
@@ -88,3 +112,7 @@ volumes:
   radarr:
   bazarr:
   jellyfin:
+
+networks:
+  nginx:
+    external: true
