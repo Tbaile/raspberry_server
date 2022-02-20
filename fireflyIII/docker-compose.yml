@@ -1,0 +1,25 @@
+version: '3.4'
+
+services:
+  app:
+    image: fireflyiii/core:latest
+    restart: unless-stopped
+    volumes:
+      - upload:/var/www/html/storage/upload
+    env_file: .env
+    depends_on:
+      - db
+  db:
+    image: mariadb    
+    hostname: fireflyiiidb
+    restart: unless-stopped
+    environment:
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+      - MYSQL_USER=${DB_USERNAME}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DB_DATABASE}
+    volumes:
+      - db:/var/lib/mysql
+volumes:
+   upload:
+   db:
