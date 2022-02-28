@@ -3,19 +3,30 @@ version: '3.5'
 services:
   portainer:
     image: 'portainer/portainer-ce'
-    container_name: portainer
     restart: unless-stopped
+    networks:
+      - reverse_proxy
     volumes: 
       - /var/run/docker.sock:/var/run/docker.sock
       - data:/data
-    networks:
-      - nginx
     command: 
       - '--admin-password=${PORTAINER_PASSWORD}'
+    labels:
+      - "traefik.enable=true"
+      # HTTP router
+      - "traefik.http.routers.portainer.entrypoints=web"
+      - "traefik.http.routers.portainer.rule=Host(`${TRAEFIK_DOMAIN:-portainer.localhost}`)"
+      - "traefik.http.routers.portainer.middlewares=local-service@file,force-http@file"
+      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+      # HTTPS router
+      - "traefik.http.routers.portainer-https.entrypoints=websecure"
+      - "traefik.http.routers.portainer-https.rule=Host(`${TRAEFIK_DOMAIN:-portainer.localhost}`)"
+      - "traefik.http.routers.portainer-https.tls=true"
+      - "traefik.http.routers.portainer-https.middlewares=local-service@file,force-http@file"
 
 volumes:
   data:
 
 networks:
-  nginx:
+  reverse_proxy:
     external: true
