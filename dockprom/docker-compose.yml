@@ -4,8 +4,6 @@ services:
   prometheus:
     image: 'prom/prometheus:v2.30.3'
     restart: unless-stopped
-    ports:
-      - '9090:9090'
     volumes:
       - ./prometheus:/etc/prometheus
       - prometheus:/prometheus
@@ -18,13 +16,25 @@ services:
       - '--web.enable-lifecycle'
     networks:
       - monitoring
+      - reverse_proxy
     labels:
-      org.label-schema.group: "monitoring"
+      - "org.label-schema.group=monitoring"
+      ## Traefik
+      - "traefik.enable=true"
+      # HTTP router
+      - "traefik.http.routers.portainer.entrypoints=web"
+      - "traefik.http.routers.portainer.rule=Host(`${PROMETHEUS_DOMAIN:-prometheus.localhost}`)"
+      - "traefik.http.routers.portainer.middlewares=local-service@file,force-http@file"
+      - "traefik.http.services.portainer.loadbalancer.server.port=9090"
+      # HTTPS router
+      - "traefik.http.routers.portainer-https.entrypoints=websecure"
+      - "traefik.http.routers.portainer-https.rule=Host(`${PROMETHEUS_DOMAIN:-prometheus.localhost}`)"
+      - "traefik.http.routers.portainer-https.tls=true"
+      - "traefik.http.routers.portainer-https.middlewares=local-service@file,force-http@file"
+      
   alertmanager:
     image: 'prom/alertmanager:v0.23.0'
     restart: unless-stopped
-    ports:
-      - '9093:9093'
     volumes:
       - ./alertmanager:/etc/alertmanager
     command:
@@ -32,8 +42,22 @@ services:
       - '--storage.path=/alertmanager'
     networks:
       - monitoring
+      - reverse_proxy
     labels:
-      org.label-schema.group: "monitoring"
+      - "org.label-schema.group=monitoring"
+      ## Traefik
+      - "traefik.enable=true"
+      # HTTP router
+      - "traefik.http.routers.portainer.entrypoints=web"
+      - "traefik.http.routers.portainer.rule=Host(`${ALERTMANAGER_DOMAIN:-alertmanager.localhost}`)"
+      - "traefik.http.routers.portainer.middlewares=local-service@file,force-http@file"
+      - "traefik.http.services.portainer.loadbalancer.server.port=9093"
+      # HTTPS router
+      - "traefik.http.routers.portainer-https.entrypoints=websecure"
+      - "traefik.http.routers.portainer-https.rule=Host(`${ALERTMANAGER_DOMAIN:-alertmanager.localhost}`)"
+      - "traefik.http.routers.portainer-https.tls=true"
+      - "traefik.http.routers.portainer-https.middlewares=local-service@file,force-http@file"
+
   nodeexporter:
     image: 'prom/node-exporter:v1.2.2'
     restart: unless-stopped
@@ -49,7 +73,8 @@ services:
     networks:
       - monitoring
     labels:
-      org.label-schema.group: "monitoring"
+      - "org.label-schema.group=monitoring"
+
   cadvisor:
     image: 'zcube/cadvisor:v0.37.5'
     restart: unless-stopped
@@ -71,12 +96,11 @@ services:
     networks:
       - monitoring
     labels:
-      org.label-schema.group: "monitoring"
+      - "org.label-schema.group=monitoring"
+
   grafana:
     image: 'grafana/grafana:8.2.1'
     restart: unless-stopped
-    ports:
-      - '3000:3000'
     volumes:
       - grafana:/var/lib/grafana
       - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
@@ -87,20 +111,36 @@ services:
       - GF_USERS_ALLOW_SIGN_UP=false
     networks:
       - monitoring
+      - reverse_proxy
     labels:
-      org.label-schema.group: "monitoring"
+      - "org.label-schema.group=monitoring"
+      ## Traefik
+      - "traefik.enable=true"
+      # HTTP router
+      - "traefik.http.routers.portainer.entrypoints=web"
+      - "traefik.http.routers.portainer.rule=Host(`${GRAFANA_DOMAIN:-grafana.localhost}`)"
+      - "traefik.http.routers.portainer.middlewares=local-service@file,force-http@file"
+      - "traefik.http.services.portainer.loadbalancer.server.port=3000"
+      # HTTPS router
+      - "traefik.http.routers.portainer-https.entrypoints=websecure"
+      - "traefik.http.routers.portainer-https.rule=Host(`${GRAFANA_DOMAIN:-grafana.localhost}`)"
+      - "traefik.http.routers.portainer-https.tls=true"
+      - "traefik.http.routers.portainer-https.middlewares=local-service@file,force-http@file"
+
   pushgateway:
     image: prom/pushgateway:v1.4.2
     restart: unless-stopped
     networks:
       - monitoring
     labels:
-      org.label-schema.group: "monitoring"
-
-networks:
-  monitoring:
-    external: true
+      - "org.label-schema.group=monitoring"
 
 volumes:
     prometheus:
     grafana:
+
+networks:
+  monitoring:
+    external: true
+  reverse_proxy:
+    external: true
