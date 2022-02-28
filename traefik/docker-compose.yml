@@ -1,0 +1,25 @@
+version: '3.5'
+
+services:
+  traefik:
+    image: traefik:v2.6
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./config/configuration.yaml:/app/configuration.yaml:ro
+    networks:
+      - reverse_proxy
+    command: 
+      - --api.insecure=true
+      - --providers.docker
+      - --providers.docker.exposedByDefault=false
+      - --entryPoints.web.address=:80
+      - --entryPoints.websecure.address=:443
+      - --providers.file.filename=/app/configuration.yaml
+
+networks:
+  reverse_proxy:
+    external: true

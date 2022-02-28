@@ -1,0 +1,16 @@
+# Accepts request from defined IP
+http:
+  middlewares:
+    local-service:
+      ipWhiteList:
+        sourceRange:
+          - "127.0.0.1/32"
+          - "192.168.1.0/24"
+    force-http:
+      redirectscheme:
+        scheme: 'http'
+        permanent: true
+    force-https:
+      redirectscheme:
+        scheme: 'https'
+        permanent: true
