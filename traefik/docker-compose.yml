@@ -3,6 +3,7 @@ version: '3.5'
 services:
   traefik:
     image: traefik:v2.6
+    restart: unless-stopped
     ports:
       - "80:80"
       - "443:443"
@@ -19,6 +20,10 @@ services:
       - --entryPoints.web.address=:80
       - --entryPoints.websecure.address=:443
       - --providers.file.filename=/app/configuration.yaml
+      - --certificatesresolvers.letsencrypt.acme.email=bailetti.tommaso@gmail.com
+      - --certificatesresolvers.letsencrypt.acme.storage=/acme.json
+      - --certificatesresolvers.letsencrypt.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
+      - --certificatesresolvers.letsencrypt.acme.tlschallenge=true
 
 networks:
   reverse_proxy:
