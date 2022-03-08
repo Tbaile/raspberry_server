@@ -11,6 +11,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./config/configuration.yaml:/app/configuration.yaml:ro
+      - data:/certificates
     networks:
       - reverse_proxy
     command: 
@@ -21,10 +22,12 @@ services:
       - --entryPoints.websecure.address=:443
       - --providers.file.filename=/app/configuration.yaml
       - --certificatesresolvers.letsencrypt.acme.email=bailetti.tommaso@gmail.com
-      - --certificatesresolvers.letsencrypt.acme.storage=/acme.json
-      - --certificatesresolvers.letsencrypt.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
+      - --certificatesresolvers.letsencrypt.acme.storage=/certificates/acme.json
       - --certificatesresolvers.letsencrypt.acme.tlschallenge=true
 
 networks:
   reverse_proxy:
     external: true
+
+volumes:
+  data:
