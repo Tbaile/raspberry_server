@@ -2,18 +2,28 @@ version: '3.5'
 
 services:
   vaultwarden:
-    image: 'vaultwarden/server:latest'
-    container_name: vaultwarden
+    image: vaultwarden/server:latest
+    networks:
+      - reverse_proxy
     volumes:
       - data:/data
     env_file:
       - .env
-    networks:
-      - nginx
-
-networks:
-  nginx:
-    external: true
+    labels:
+      - "traefik.enable=true"
+      # HTTP router
+      - "traefik.http.routers.vaultwarden.entrypoints=web"
+      - "traefik.http.routers.vaultwarden.rule=Host(`${VAULTWARDEN_DOMAIN:-vaultwarden.localhost}`)"
+      - "traefik.http.routers.vaultwarden.middlewares=force-https@file"
+      # HTTPS router
+      - "traefik.http.routers.vaultwarden-https.entrypoints=websecure"
+      - "traefik.http.routers.vaultwarden-https.rule=Host(`${VAULTWARDEN_DOMAIN:-vaultwarden.localhost}`)"
+      - "traefik.http.routers.vaultwarden-https.tls=true"
+      - "traefik.http.routers.vaultwarden-https.tls.certresolver=letsencrypt"
 
 volumes:
   data:
+
+networks:
+  reverse_proxy:
+    external: true
