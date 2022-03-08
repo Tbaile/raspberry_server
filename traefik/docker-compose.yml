@@ -24,6 +24,10 @@ services:
       - --certificatesresolvers.letsencrypt.acme.email=bailetti.tommaso@gmail.com
       - --certificatesresolvers.letsencrypt.acme.storage=/certificates/acme.json
       - --certificatesresolvers.letsencrypt.acme.tlschallenge=true
+      - --certificatesresolvers.letsencrypt-staging.acme.email=bailetti.tommaso@gmail.com
+      - --certificatesresolvers.letsencrypt-staging.acme.storage=/certificates/acme-staging.json
+      - --certificatesresolvers.letsencrypt-staging.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
+      - --certificatesresolvers.letsencrypt-staging.acme.tlschallenge=true
 
 networks:
   reverse_proxy:
