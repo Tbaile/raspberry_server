@@ -2,33 +2,44 @@ version: '3.4'
 
 services:
   app:
-    container_name: firefly
     image: fireflyiii/core:latest
     restart: unless-stopped
-    volumes:
-      - upload:/var/www/html/storage/upload
     networks:
       - default
-      - nginx
-    env_file: .env
+      - reverse_proxy
     depends_on:
       - db
+    volumes:
+      - upload:/var/www/html/storage/upload
+    env_file: .env
+    labels:
+      - "traefik.enable=true"
+      # HTTP router
+      - "traefik.http.routers.fireflyiii.entrypoints=web"
+      - "traefik.http.routers.fireflyiii.rule=Host(`${FIREFLYIII_DOMAIN:-fireflyiii.localhost}`)"
+      - "traefik.http.routers.fireflyiii.middlewares=force-https@file"
+      # HTTPS router
+      - "traefik.http.routers.fireflyiii-https.entrypoints=websecure"
+      - "traefik.http.routers.fireflyiii-https.rule=Host(`${FIREFLYIII_DOMAIN:-fireflyiii.localhost}`)"
+      - "traefik.http.routers.fireflyiii-https.tls=true"
+      - "traefik.http.routers.fireflyiii-https.tls.certresolver=letsencrypt"
+    
   db:
-    image: mariadb    
+    image: mariadb
     hostname: fireflyiiidb
     restart: unless-stopped
+    volumes:
+      - db:/var/lib/mysql
     environment:
       - MYSQL_RANDOM_ROOT_PASSWORD=yes
       - MYSQL_USER=${DB_USERNAME}
       - MYSQL_PASSWORD=${DB_PASSWORD}
       - MYSQL_DATABASE=${DB_DATABASE}
-    volumes:
-      - db:/var/lib/mysql
 
 volumes:
    upload:
    db:
 
 networks:
-  nginx:
+  reverse_proxy:
     external: true
