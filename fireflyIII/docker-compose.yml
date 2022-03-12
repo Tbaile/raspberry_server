@@ -4,11 +4,11 @@ services:
   app:
     image: fireflyiii/core:latest
     restart: unless-stopped
+    depends_on:
+      - db
     networks:
       - default
       - reverse_proxy
-    depends_on:
-      - db
     volumes:
       - upload:/var/www/html/storage/upload
     env_file: .env
@@ -17,16 +17,16 @@ services:
       # HTTP router
       - "traefik.http.routers.fireflyiii.entrypoints=web"
       - "traefik.http.routers.fireflyiii.rule=Host(`${FIREFLYIII_DOMAIN:-fireflyiii.localhost}`)"
-      - "traefik.http.routers.fireflyiii.middlewares=force-https@file"
+      - "traefik.http.routers.fireflyiii.middlewares=local-service@file,force-http@file"
+      - "traefik.http.services.fireflyiii.loadbalancer.server.port=8080"
       # HTTPS router
       - "traefik.http.routers.fireflyiii-https.entrypoints=websecure"
       - "traefik.http.routers.fireflyiii-https.rule=Host(`${FIREFLYIII_DOMAIN:-fireflyiii.localhost}`)"
       - "traefik.http.routers.fireflyiii-https.tls=true"
-      - "traefik.http.routers.fireflyiii-https.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.fireflyiii-https.middlewares=local-service@file,force-http@file"
     
   db:
     image: mariadb
-    hostname: fireflyiiidb
     restart: unless-stopped
     volumes:
       - db:/var/lib/mysql
