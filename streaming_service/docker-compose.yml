@@ -1,108 +1,173 @@
 version: '3.5'
 
 services:
-  jackett:
-    image: 'linuxserver/jackett'
-    container_name: jackett
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:develop
     restart: unless-stopped
-    volumes:
-      - jackett:/config/Jackett
     networks:
       - default
-      - nginx
+      - reverse_proxy
+    volumes:
+      - prowlarr:/config
     env_file:
       - .env
+    labels:
+      - "traefik.enable=true"
+      # HTTP router
+      - "traefik.http.routers.prowlarr.entrypoints=web"
+      - "traefik.http.routers.prowlarr.rule=Host(`${PROWLARR_DOMAIN:-prowlarr.localhost}`)"
+      - "traefik.http.routers.prowlarr.middlewares=local-service@file,force-http@file"
+      - "traefik.http.services.prowlarr.loadbalancer.server.port=9696"
+      # HTTPS router
+      - "traefik.http.routers.prowlarr-https.entrypoints=websecure"
+      - "traefik.http.routers.prowlarr-https.rule=Host(`${PROWLARR_DOMAIN:-prowlarr.localhost}`)"
+      - "traefik.http.routers.prowlarr-https.tls=true"
+      - "traefik.http.routers.prowlarr-https.middlewares=local-service@file,force-http@file"
+
   transmission:
-    image: 'linuxserver/transmission'
-    container_name: transmission
+    image: linuxserver/transmission
     restart: unless-stopped
-    volumes: 
-      - ./data:/mnt/data
-      - transmission:/config
     networks:
       - default
-      - nginx
+      - reverse_proxy
+    volumes:
+      - ./config/transmission:/config
+      - ./data:/mnt/data
     logging:
       driver: json-file
       options:
         max-size: 10m
     env_file:
       - .env
+    labels:
+      - "traefik.enable=true"
+      # HTTP router
+      - "traefik.http.routers.transmission.entrypoints=web"
+      - "traefik.http.routers.transmission.rule=Host(`${TRANSMISSION_DOMAIN:-transmission.localhost}`)"
+      - "traefik.http.routers.transmission.middlewares=local-service@file,force-http@file"
+      - "traefik.http.services.transmission.loadbalancer.server.port=9091"
+      # HTTPS router
+      - "traefik.http.routers.transmission-https.entrypoints=websecure"
+      - "traefik.http.routers.transmission-https.rule=Host(`${TRANSMISSION_DOMAIN:-transmission.localhost}`)"
+      - "traefik.http.routers.transmission-https.tls=true"
+      - "traefik.http.routers.transmission-https.middlewares=local-service@file,force-http@file"
+
   sonarr:
-    image: 'linuxserver/sonarr'
-    container_name: sonarr
+    image: linuxserver/sonarr
     restart: unless-stopped
     depends_on:
-      - jackett
+      - prowlarr
       - transmission
+    networks:
+      - default
+      - reverse_proxy
     volumes:
       - sonarr:/config
       - ./data:/mnt/data
-    networks:
-      - default
-      - nginx
     env_file:
       - .env
+    labels:
+      - "traefik.enable=true"
+      # HTTP router
+      - "traefik.http.routers.sonarr.entrypoints=web"
+      - "traefik.http.routers.sonarr.rule=Host(`${SONARR_DOMAIN:-sonarr.localhost}`)"
+      - "traefik.http.routers.sonarr.middlewares=local-service@file,force-http@file"
+      - "traefik.http.services.sonarr.loadbalancer.server.port=8989"
+      # HTTPS router
+      - "traefik.http.routers.sonarr-https.entrypoints=websecure"
+      - "traefik.http.routers.sonarr-https.rule=Host(`${SONARR_DOMAIN:-sonarr.localhost}`)"
+      - "traefik.http.routers.sonarr-https.tls=true"
+      - "traefik.http.routers.sonarr-https.middlewares=local-service@file,force-http@file"
+
   radarr:
-    image: 'linuxserver/radarr'
-    container_name: radarr
+    image: linuxserver/radarr
     restart: unless-stopped
     depends_on:
-      - jackett
+      - prowlarr
       - transmission
+    networks:
+      - default
+      - reverse_proxy
     volumes:
       - radarr:/config
       - ./data:/mnt/data
-    networks:
-      - default
-      - nginx
     env_file:
       - .env
+    labels:
+      - "traefik.enable=true"
+      # HTTP router
+      - "traefik.http.routers.radarr.entrypoints=web"
+      - "traefik.http.routers.radarr.rule=Host(`${RADARR_DOMAIN:-radarr.localhost}`)"
+      - "traefik.http.routers.radarr.middlewares=local-service@file,force-http@file"
+      - "traefik.http.services.radarr.loadbalancer.server.port=7878"
+      # HTTPS router
+      - "traefik.http.routers.radarr-https.entrypoints=websecure"
+      - "traefik.http.routers.radarr-https.rule=Host(`${RADARR_DOMAIN:-radarr.localhost}`)"
+      - "traefik.http.routers.radarr-https.tls=true"
+      - "traefik.http.routers.radarr-https.middlewares=local-service@file,force-http@file"
+
   bazarr:
-    image: 'linuxserver/bazarr'
-    container_name: bazarr
+    image: linuxserver/bazarr
     restart: unless-stopped
+    networks:
+      - default
+      - reverse_proxy
     volumes:
       - bazarr:/config
       - ./data/media/movies:/mnt/data/media/movies
       - ./data/media/tv:/mnt/data/media/tv
-    networks:
-      - default
-      - nginx
     env_file:
       - .env
+    labels:
+      - "traefik.enable=true"
+      # HTTP router
+      - "traefik.http.routers.bazarr.entrypoints=web"
+      - "traefik.http.routers.bazarr.rule=Host(`${BAZARR_DOMAIN:-bazarr.localhost}`)"
+      - "traefik.http.routers.bazarr.middlewares=local-service@file,force-http@file"
+      - "traefik.http.services.bazarr.loadbalancer.server.port=6767"
+      # HTTPS router
+      - "traefik.http.routers.bazarr-https.entrypoints=websecure"
+      - "traefik.http.routers.bazarr-https.rule=Host(`${BAZARR_DOMAIN:-bazarr.localhost}`)"
+      - "traefik.http.routers.bazarr-https.tls=true"
+      - "traefik.http.routers.bazarr-https.middlewares=local-service@file,force-http@file"
+
   jellyfin:
-    image: 'linuxserver/jellyfin'
-    container_name: jellyfin
+    image: linuxserver/jellyfin
     restart: unless-stopped
-    ports:
-      - '8096:8096'
-      - '8920:8920'
-      - '7359:7359/udp'
-      - '1900:1900/udp'
+    networks:
+      - default
+      - reverse_proxy
+    # devices:
+    #   - /dev/vchiq:/dev/vchiq
+    #   - /dev/video10:/dev/video10
+    #   - /dev/video11:/dev/video11
+    #   - /dev/video12:/dev/video12
     volumes:
       - ./data/media:/mnt/media
       - jellyfin:/config
-      - /opt/vc/lib:/opt/vc/lib
-    networks:
-      - default
-      - nginx
-    devices:
-      - /dev/vchiq:/dev/vchiq
-      - /dev/video10:/dev/video10
-      - /dev/video11:/dev/video11
-      - /dev/video12:/dev/video12
+      # - /opt/vc/lib:/opt/vc/lib
     env_file:
       - .env
+    labels:
+      - "traefik.enable=true"
+      # HTTP router
+      - "traefik.http.routers.jellyfin.entrypoints=web"
+      - "traefik.http.routers.jellyfin.rule=Host(`${JELLYFIN_DOMAIN:-jellyfin.localhost}`)"
+      - "traefik.http.routers.jellyfin.middlewares=local-service@file,force-http@file"
+      - "traefik.http.services.jellyfin.loadbalancer.server.port=8096"
+      # HTTPS router
+      - "traefik.http.routers.jellyfin-https.entrypoints=websecure"
+      - "traefik.http.routers.jellyfin-https.rule=Host(`${JELLYFIN_DOMAIN:-jellyfin.localhost}`)"
+      - "traefik.http.routers.jellyfin-https.tls=true"
+      - "traefik.http.routers.jellyfin-https.middlewares=local-service@file,force-http@file"
 
 volumes:
-  jackett:
-  transmission:
+  prowlarr:
   sonarr:
   radarr:
   bazarr:
   jellyfin:
 
 networks:
-  nginx:
+  reverse_proxy:
     external: true
