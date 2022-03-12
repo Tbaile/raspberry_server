@@ -8,12 +8,12 @@ services:
       - "80:80"
       - "443:443"
       - "8080:8080"
+    networks:
+      - reverse_proxy
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./config/configuration.yaml:/app/configuration.yaml:ro
       - data:/certificates
-    networks:
-      - reverse_proxy
     command: 
       - --api.insecure=true
       - --providers.docker
