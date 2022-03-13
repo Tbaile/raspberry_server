@@ -18,11 +18,6 @@ services:
       - "traefik.http.routers.prowlarr.rule=Host(`${PROWLARR_DOMAIN:-prowlarr.localhost}`)"
       - "traefik.http.routers.prowlarr.middlewares=local-service@file,force-http@file"
       - "traefik.http.services.prowlarr.loadbalancer.server.port=9696"
-      # HTTPS router
-      - "traefik.http.routers.prowlarr-https.entrypoints=websecure"
-      - "traefik.http.routers.prowlarr-https.rule=Host(`${PROWLARR_DOMAIN:-prowlarr.localhost}`)"
-      - "traefik.http.routers.prowlarr-https.tls=true"
-      - "traefik.http.routers.prowlarr-https.middlewares=local-service@file,force-http@file"
 
   transmission:
     image: linuxserver/transmission
