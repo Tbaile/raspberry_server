@@ -19,11 +19,6 @@ services:
       - "traefik.http.routers.fireflyiii.rule=Host(`${FIREFLYIII_DOMAIN:-fireflyiii.localhost}`)"
       - "traefik.http.routers.fireflyiii.middlewares=local-service@file,force-http@file"
       - "traefik.http.services.fireflyiii.loadbalancer.server.port=8080"
-      # HTTPS router
-      - "traefik.http.routers.fireflyiii-https.entrypoints=websecure"
-      - "traefik.http.routers.fireflyiii-https.rule=Host(`${FIREFLYIII_DOMAIN:-fireflyiii.localhost}`)"
-      - "traefik.http.routers.fireflyiii-https.tls=true"
-      - "traefik.http.routers.fireflyiii-https.middlewares=local-service@file,force-http@file"
     
   db:
     image: mariadb

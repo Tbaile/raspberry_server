@@ -23,12 +23,6 @@ services:
       - "traefik.http.routers.pihole.entrypoints=web"
       - "traefik.http.routers.pihole.rule=Host(`${PIHOLE_DOMAIN:-pihole.localhost}`)"
       - "traefik.http.routers.pihole.middlewares=local-service@file,force-http@file"
-      - "traefik.http.services.pihole.loadbalancer.server.port=80"
-      # HTTPS router
-      - "traefik.http.routers.pihole-https.entrypoints=websecure"
-      - "traefik.http.routers.pihole-https.rule=Host(`${PIHOLE_DOMAIN:-pihole.localhost}`)"
-      - "traefik.http.routers.pihole-https.tls=true"
-      - "traefik.http.routers.pihole-https.middlewares=local-service@file,force-http@file"
 
 volumes:
   pihole:

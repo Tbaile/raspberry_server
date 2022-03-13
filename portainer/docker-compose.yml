@@ -18,11 +18,6 @@ services:
       - "traefik.http.routers.portainer.rule=Host(`${PORTAINER_DOMAIN:-portainer.localhost}`)"
       - "traefik.http.routers.portainer.middlewares=local-service@file,force-http@file"
       - "traefik.http.services.portainer.loadbalancer.server.port=9000"
-      # HTTPS router
-      - "traefik.http.routers.portainer-https.entrypoints=websecure"
-      - "traefik.http.routers.portainer-https.rule=Host(`${PORTAINER_DOMAIN:-portainer.localhost}`)"
-      - "traefik.http.routers.portainer-https.tls=true"
-      - "traefik.http.routers.portainer-https.middlewares=local-service@file,force-http@file"
 
 volumes:
   data:

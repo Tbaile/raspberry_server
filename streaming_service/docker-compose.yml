@@ -46,11 +46,6 @@ services:
       - "traefik.http.routers.transmission.rule=Host(`${TRANSMISSION_DOMAIN:-transmission.localhost}`)"
       - "traefik.http.routers.transmission.middlewares=local-service@file,force-http@file"
       - "traefik.http.services.transmission.loadbalancer.server.port=9091"
-      # HTTPS router
-      - "traefik.http.routers.transmission-https.entrypoints=websecure"
-      - "traefik.http.routers.transmission-https.rule=Host(`${TRANSMISSION_DOMAIN:-transmission.localhost}`)"
-      - "traefik.http.routers.transmission-https.tls=true"
-      - "traefik.http.routers.transmission-https.middlewares=local-service@file,force-http@file"
 
   sonarr:
     image: linuxserver/sonarr
@@ -73,11 +68,6 @@ services:
       - "traefik.http.routers.sonarr.rule=Host(`${SONARR_DOMAIN:-sonarr.localhost}`)"
       - "traefik.http.routers.sonarr.middlewares=local-service@file,force-http@file"
       - "traefik.http.services.sonarr.loadbalancer.server.port=8989"
-      # HTTPS router
-      - "traefik.http.routers.sonarr-https.entrypoints=websecure"
-      - "traefik.http.routers.sonarr-https.rule=Host(`${SONARR_DOMAIN:-sonarr.localhost}`)"
-      - "traefik.http.routers.sonarr-https.tls=true"
-      - "traefik.http.routers.sonarr-https.middlewares=local-service@file,force-http@file"
 
   radarr:
     image: linuxserver/radarr
@@ -100,11 +90,6 @@ services:
       - "traefik.http.routers.radarr.rule=Host(`${RADARR_DOMAIN:-radarr.localhost}`)"
       - "traefik.http.routers.radarr.middlewares=local-service@file,force-http@file"
       - "traefik.http.services.radarr.loadbalancer.server.port=7878"
-      # HTTPS router
-      - "traefik.http.routers.radarr-https.entrypoints=websecure"
-      - "traefik.http.routers.radarr-https.rule=Host(`${RADARR_DOMAIN:-radarr.localhost}`)"
-      - "traefik.http.routers.radarr-https.tls=true"
-      - "traefik.http.routers.radarr-https.middlewares=local-service@file,force-http@file"
 
   bazarr:
     image: linuxserver/bazarr
@@ -125,11 +110,6 @@ services:
       - "traefik.http.routers.bazarr.rule=Host(`${BAZARR_DOMAIN:-bazarr.localhost}`)"
       - "traefik.http.routers.bazarr.middlewares=local-service@file,force-http@file"
       - "traefik.http.services.bazarr.loadbalancer.server.port=6767"
-      # HTTPS router
-      - "traefik.http.routers.bazarr-https.entrypoints=websecure"
-      - "traefik.http.routers.bazarr-https.rule=Host(`${BAZARR_DOMAIN:-bazarr.localhost}`)"
-      - "traefik.http.routers.bazarr-https.tls=true"
-      - "traefik.http.routers.bazarr-https.middlewares=local-service@file,force-http@file"
 
   jellyfin:
     image: linuxserver/jellyfin
@@ -155,11 +135,6 @@ services:
       - "traefik.http.routers.jellyfin.rule=Host(`${JELLYFIN_DOMAIN:-jellyfin.localhost}`)"
       - "traefik.http.routers.jellyfin.middlewares=local-service@file,force-http@file"
       - "traefik.http.services.jellyfin.loadbalancer.server.port=8096"
-      # HTTPS router
-      - "traefik.http.routers.jellyfin-https.entrypoints=websecure"
-      - "traefik.http.routers.jellyfin-https.rule=Host(`${JELLYFIN_DOMAIN:-jellyfin.localhost}`)"
-      - "traefik.http.routers.jellyfin-https.tls=true"
-      - "traefik.http.routers.jellyfin-https.middlewares=local-service@file,force-http@file"
 
 volumes:
   prowlarr:
