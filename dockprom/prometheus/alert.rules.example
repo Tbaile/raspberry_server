@@ -40,7 +40,7 @@ groups:
 - name: containers
   rules:
   - alert: traefik
-    expr: absent(container_memory_usage_bytes{name="traefik"})
+    expr: absent(container_memory_usage_bytes{name=~"^traefik.*"})
     for: 10m
     labels:
       severity: critical
@@ -48,7 +48,7 @@ groups:
       summary: "Traefik down"
       description: "Proxy Server is offline."
   - alert: watchtower_offline
-    expr: absent(container_memory_usage_bytes{name="watchtower"})
+    expr: absent(container_memory_usage_bytes{name=~"^watchtower.*"})
     for: 10m
     labels:
       severity: warning
@@ -56,7 +56,7 @@ groups:
       summary: "Watchtower not running"
       description: "Watchtower is not running in the system, automatic image update is not available."
   - alert: portainer_offline
-    expr: absent(container_memory_usage_bytes{name="portainer"})
+    expr: absent(container_memory_usage_bytes{name=~"^portainer.*"})
     for: 10m
     labels:
       severity: warning
@@ -64,10 +64,10 @@ groups:
       summary: "Portainer not running"
       description: "Portainer is not running, access through gui is impossible."
   - alert: vaultwarden_offline
-    expr: absent(container_memory_usage_bytes{name="vaultwarden"})
+    expr: absent(container_memory_usage_bytes{name=~"^vaultwarden.*"})
     for: 10m
     labels:
       severity: warning
     annotations:
       summary: "Vaultwarden not running"
-      description: "Portainer is not running, password manager offline."
+      description: "Vaultwarden is not running, password manager offline."
