@@ -18,6 +18,7 @@ services:
       - --api.insecure=true
       - --providers.docker
       - --providers.docker.exposedByDefault=false
+      - --providers.docker.network=reverse_proxy
       - --entryPoints.web.address=:80
       - --entryPoints.websecure.address=:443
       - --providers.file.filename=/app/configuration.yaml
