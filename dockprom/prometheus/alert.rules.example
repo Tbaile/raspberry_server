@@ -39,13 +39,13 @@ groups:
 
 - name: containers
   rules:
-  - alert: nginx_proxy_offline
-    expr: absent(container_memory_usage_bytes{name="nginx_proxy_manager"})
+  - alert: traefik
+    expr: absent(container_memory_usage_bytes{name="traefik"})
     for: 10m
     labels:
       severity: critical
     annotations:
-      summary: "Nginx Proxy down"
+      summary: "Traefik down"
       description: "Proxy Server is offline."
   - alert: watchtower_offline
     expr: absent(container_memory_usage_bytes{name="watchtower"})
