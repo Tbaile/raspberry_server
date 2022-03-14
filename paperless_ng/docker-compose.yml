@@ -2,37 +2,44 @@ version: '3.5'
 
 services:
   scheduler:
-    image: 'redis'
+    image: redis
     restart: unless-stopped
   
   paperless:
-    image: 'jonaswinkler/paperless-ng'
-    container_name: paperless
+    image: jonaswinkler/paperless-ng
     restart: unless-stopped
     depends_on:
       - scheduler
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
+    networks:
+      - default
+      - reverse_proxy
     volumes:
       - data:/usr/src/paperless/data
       - media:/usr/src/paperless/media
       - ./export:/usr/src/paperless/export
       - ./consume:/usr/src/paperless/consume
-    networks:
-      - default
-      - nginx
     env_file:
       - .env
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    labels:
+      - "traefik.enable=true"
+      # HTTP router
+      - "traefik.http.routers.paperless.entrypoints=web"
+      - "traefik.http.routers.paperless.rule=Host(`${PAPERLESS_DOMAIN:-paperless.localhost}`)"
+      - "traefik.http.routers.paperless.middlewares=local-service@file,force-http@file"
+      - "traefik.http.services.paperless.loadbalancer.server.port=8000"
     environment:
       PAPERLESS_REDIS: redis://scheduler:6379
+    
 
 volumes:
   data:
   media:
 
 networks:
-  nginx:
+  reverse_proxy:
     external: true
