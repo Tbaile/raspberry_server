@@ -114,15 +114,15 @@ services:
     networks:
       - default
       - reverse_proxy
-    # devices:
-    #   - /dev/vchiq:/dev/vchiq
-    #   - /dev/video10:/dev/video10
-    #   - /dev/video11:/dev/video11
-    #   - /dev/video12:/dev/video12
+    devices:
+      - /dev/vchiq:/dev/vchiq
+      - /dev/video10:/dev/video10
+      - /dev/video11:/dev/video11
+      - /dev/video12:/dev/video12
     volumes:
       - ./data/media:/mnt/media
       - jellyfin:/config
-      # - /opt/vc/lib:/opt/vc/lib
+      - /opt/vc/lib:/opt/vc/lib
     env_file:
       - .env
     labels:
