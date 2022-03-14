@@ -16,7 +16,7 @@ services:
       # HTTP router
       - "traefik.http.routers.prowlarr.entrypoints=web"
       - "traefik.http.routers.prowlarr.rule=Host(`${PROWLARR_DOMAIN:-prowlarr.localhost}`)"
-      - "traefik.http.routers.prowlarr.middlewares=local-service@file,force-http@file"
+      - "traefik.http.routers.prowlarr.middlewares=local-service@file"
       - "traefik.http.services.prowlarr.loadbalancer.server.port=9696"
 
   transmission:
@@ -39,7 +39,7 @@ services:
       # HTTP router
       - "traefik.http.routers.transmission.entrypoints=web"
       - "traefik.http.routers.transmission.rule=Host(`${TRANSMISSION_DOMAIN:-transmission.localhost}`)"
-      - "traefik.http.routers.transmission.middlewares=local-service@file,force-http@file"
+      - "traefik.http.routers.transmission.middlewares=local-service@file"
       - "traefik.http.services.transmission.loadbalancer.server.port=9091"
 
   sonarr:
@@ -62,7 +62,7 @@ services:
       # HTTP router
       - "traefik.http.routers.sonarr.entrypoints=web"
       - "traefik.http.routers.sonarr.rule=Host(`${SONARR_DOMAIN:-sonarr.localhost}`)"
-      - "traefik.http.routers.sonarr.middlewares=local-service@file,force-http@file"
+      - "traefik.http.routers.sonarr.middlewares=local-service@file"
       - "traefik.http.services.sonarr.loadbalancer.server.port=8989"
 
   radarr:
@@ -85,7 +85,7 @@ services:
       # HTTP router
       - "traefik.http.routers.radarr.entrypoints=web"
       - "traefik.http.routers.radarr.rule=Host(`${RADARR_DOMAIN:-radarr.localhost}`)"
-      - "traefik.http.routers.radarr.middlewares=local-service@file,force-http@file"
+      - "traefik.http.routers.radarr.middlewares=local-service@file"
       - "traefik.http.services.radarr.loadbalancer.server.port=7878"
 
   bazarr:
@@ -105,7 +105,7 @@ services:
       # HTTP router
       - "traefik.http.routers.bazarr.entrypoints=web"
       - "traefik.http.routers.bazarr.rule=Host(`${BAZARR_DOMAIN:-bazarr.localhost}`)"
-      - "traefik.http.routers.bazarr.middlewares=local-service@file,force-http@file"
+      - "traefik.http.routers.bazarr.middlewares=local-service@file"
       - "traefik.http.services.bazarr.loadbalancer.server.port=6767"
 
   jellyfin:
@@ -130,7 +130,7 @@ services:
       # HTTP router
       - "traefik.http.routers.jellyfin.entrypoints=web"
       - "traefik.http.routers.jellyfin.rule=Host(`${JELLYFIN_DOMAIN:-jellyfin.localhost}`)"
-      - "traefik.http.routers.jellyfin.middlewares=local-service@file,force-http@file"
+      - "traefik.http.routers.jellyfin.middlewares=local-service@file"
       - "traefik.http.services.jellyfin.loadbalancer.server.port=8096"
 
 volumes:

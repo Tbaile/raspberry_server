@@ -30,7 +30,7 @@ services:
       # HTTP router
       - "traefik.http.routers.paperless.entrypoints=web"
       - "traefik.http.routers.paperless.rule=Host(`${PAPERLESS_DOMAIN:-paperless.localhost}`)"
-      - "traefik.http.routers.paperless.middlewares=local-service@file,force-http@file"
+      - "traefik.http.routers.paperless.middlewares=local-service@file"
       - "traefik.http.services.paperless.loadbalancer.server.port=8000"
     environment:
       PAPERLESS_REDIS: redis://scheduler:6379

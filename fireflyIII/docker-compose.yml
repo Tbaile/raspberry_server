@@ -17,7 +17,7 @@ services:
       # HTTP router
       - "traefik.http.routers.fireflyiii.entrypoints=web"
       - "traefik.http.routers.fireflyiii.rule=Host(`${FIREFLYIII_DOMAIN:-fireflyiii.localhost}`)"
-      - "traefik.http.routers.fireflyiii.middlewares=local-service@file,force-http@file"
+      - "traefik.http.routers.fireflyiii.middlewares=local-service@file"
       - "traefik.http.services.fireflyiii.loadbalancer.server.port=8080"
     
   db:

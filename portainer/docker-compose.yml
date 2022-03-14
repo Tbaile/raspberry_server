@@ -16,7 +16,7 @@ services:
       # HTTP router
       - "traefik.http.routers.portainer.entrypoints=web"
       - "traefik.http.routers.portainer.rule=Host(`${PORTAINER_DOMAIN:-portainer.localhost}`)"
-      - "traefik.http.routers.portainer.middlewares=local-service@file,force-http@file"
+      - "traefik.http.routers.portainer.middlewares=local-service@file"
       - "traefik.http.services.portainer.loadbalancer.server.port=9000"
 
 volumes:
