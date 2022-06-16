@@ -27,7 +27,7 @@ services:
       - reverse_proxy
     volumes:
       - transmission:/config
-      - ./data/downloads:/downloads
+      - ${STORAGE_PATH:-./data}/downloads:/downloads
     logging:
       driver: json-file
       options:
@@ -53,8 +53,8 @@ services:
       - reverse_proxy
     volumes:
       - sonarr:/config
-      - ./data/media/tv:/tv
-      - ./data/downloads:/downloads
+      - ${STORAGE_PATH:-./data}/media/tv:/tv
+      - ${STORAGE_PATH:-./data}/downloads:/downloads
     env_file:
       - .env
     labels:
@@ -76,8 +76,8 @@ services:
       - reverse_proxy
     volumes:
       - radarr:/config
-      - ./data/media/movies:/movies
-      - ./data/downloads:/downloads
+      - ${STORAGE_PATH:-./data}/media/movies:/movies
+      - ${STORAGE_PATH:-./data}/downloads:/downloads
     env_file:
       - .env
     labels:
@@ -96,8 +96,8 @@ services:
       - reverse_proxy
     volumes:
       - bazarr:/config
-      - ./data/media/movies:/mnt/data/media/movies
-      - ./data/media/tv:/mnt/data/media/tv
+      - ${STORAGE_PATH:-./data}/media/movies:/mnt/data/media/movies
+      - ${STORAGE_PATH:-./data}/media/tv:/mnt/data/media/tv
     env_file:
       - .env
     labels:
@@ -120,7 +120,7 @@ services:
       - /dev/video11:/dev/video11
       - /dev/video12:/dev/video12
     volumes:
-      - ./data/media:/mnt/media
+      - ${STORAGE_PATH:-./data}/media:/mnt/media
       - jellyfin:/config
       - /opt/vc/lib:/opt/vc/lib
     env_file:
