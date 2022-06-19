@@ -1,12 +1,9 @@
 version: '3.5'
 
 services:
-  scheduler:
-    image: redis
-    restart: unless-stopped
-  
   paperless:
     image: jonaswinkler/paperless-ng
+    hostname: ${PAPERLESS_DOMAIN:-paperless.localhost}
     restart: unless-stopped
     depends_on:
       - scheduler
@@ -34,7 +31,9 @@ services:
       - "traefik.http.services.paperless.loadbalancer.server.port=8000"
     environment:
       PAPERLESS_REDIS: redis://scheduler:6379
-    
+  scheduler:
+    image: redis
+    restart: unless-stopped    
 
 volumes:
   data:

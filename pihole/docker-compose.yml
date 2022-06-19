@@ -3,6 +3,7 @@ version: '3.5'
 services:
   pihole:
     image: pihole/pihole:latest
+    hostname: ${PIHOLE_DOMAIN:-pihole.localhost}
     restart: unless-stopped
     networks:
       - default

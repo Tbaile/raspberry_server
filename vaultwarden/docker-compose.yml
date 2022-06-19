@@ -3,6 +3,7 @@ version: '3.5'
 services:
   vaultwarden:
     image: vaultwarden/server:latest
+    hostname: ${VAULTWARDEN_DOMAIN:-vaultwarden.localhost}
     networks:
       - reverse_proxy
     volumes:

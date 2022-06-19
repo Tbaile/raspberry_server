@@ -3,6 +3,7 @@ version: '3.4'
 services:
     web:
         image: tbaile/lupus-web:develop
+        hostname: ${APP_DOMAIN:-lupusweb.localhost}
         restart: unless-stopped
         depends_on:
             - app

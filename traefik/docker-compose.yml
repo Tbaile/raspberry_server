@@ -3,6 +3,7 @@ version: '3.5'
 services:
   traefik:
     image: traefik:v2.6
+    hostname: raspberrypi
     restart: unless-stopped
     ports:
       - "80:80"
