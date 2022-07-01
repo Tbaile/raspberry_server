@@ -1,0 +1,4 @@
+## Configuration example for configuration
+#SEND_TELEGRAM="YES"
+#TELEGRAM_BOT_TOKEN="###"
+#DEFAULT_RECIPIENT_TELEGRAM="###"
