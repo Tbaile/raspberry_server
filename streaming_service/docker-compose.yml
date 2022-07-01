@@ -46,7 +46,7 @@ services:
     restart: unless-stopped
     depends_on:
       - prowlarr
-      - transmission
+      - qbittorrent
     networks:
       - default
       - reverse_proxy
@@ -70,7 +70,7 @@ services:
     restart: unless-stopped
     depends_on:
       - prowlarr
-      - transmission
+      - qbittorrent
     networks:
       - default
       - reverse_proxy
