@@ -40,30 +40,6 @@ services:
       - "traefik.http.routers.qbittorrent.middlewares=local-service@file"
       - "traefik.http.services.qbittorrent.loadbalancer.server.port=8080"
 
-  transmission:
-    image: linuxserver/transmission
-    hostname: ${TRANSMISSION_DOMAIN:-transmission.localhost}
-    restart: unless-stopped
-    networks:
-      - default
-      - reverse_proxy
-    volumes:
-      - transmission:/config
-      - ${STORAGE_PATH:-./data}/downloads:/downloads
-    logging:
-      driver: json-file
-      options:
-        max-size: 10m
-    env_file:
-      - .env
-    labels:
-      - "traefik.enable=true"
-      # HTTP router
-      - "traefik.http.routers.transmission.entrypoints=web"
-      - "traefik.http.routers.transmission.rule=Host(`${TRANSMISSION_DOMAIN:-transmission.localhost}`)"
-      - "traefik.http.routers.transmission.middlewares=local-service@file"
-      - "traefik.http.services.transmission.loadbalancer.server.port=9091"
-
   sonarr:
     image: linuxserver/sonarr
     hostname: ${SONARR_DOMAIN:-sonarr.localhost}
@@ -116,6 +92,9 @@ services:
     image: linuxserver/bazarr
     hostname: ${BAZARR_DOMAIN:-bazarr.localhost}
     restart: unless-stopped
+    depends_on:
+      - radarr
+      - sonarr
     networks:
       - default
       - reverse_proxy
@@ -165,7 +144,6 @@ volumes:
   radarr:
   bazarr:
   jellyfin:
-  transmission:
   qbittorrent:
 
 networks:
