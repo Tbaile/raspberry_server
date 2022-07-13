@@ -33,6 +33,7 @@ services:
       - "traefik.http.services.netdata.loadbalancer.server.port=19999"
   proxy:
     image: tecnativa/docker-socket-proxy
+    restart: unless-stopped
     volumes:
      - /var/run/docker.sock:/var/run/docker.sock:ro
     environment:
