@@ -4,6 +4,7 @@ services:
   vaultwarden:
     image: vaultwarden/server:latest
     hostname: ${VAULTWARDEN_DOMAIN:-vaultwarden.localhost}
+    restart: unless-stopped
     networks:
       - reverse_proxy
     volumes:
