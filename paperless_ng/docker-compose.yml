@@ -2,7 +2,7 @@ version: '3.5'
 
 services:
   paperless:
-    image: jonaswinkler/paperless-ng
+    image: ghcr.io/paperless-ngx/paperless-ngx:latest
     hostname: ${PAPERLESS_DOMAIN:-paperless.localhost}
     restart: unless-stopped
     depends_on:
