@@ -2,9 +2,11 @@ version: '3.5'
 
 services:
   pihole:
-    image: pihole/pihole:latest
+    image: pihole/pihole:2022.04
     hostname: ${PIHOLE_DOMAIN:-pihole.localhost}
     restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
     networks:
       - default
       - reverse_proxy
@@ -25,6 +27,8 @@ services:
       - "traefik.http.routers.pihole.rule=Host(`${PIHOLE_DOMAIN:-pihole.localhost}`)"
       - "traefik.http.routers.pihole.middlewares=local-service@file"
       - "traefik.http.services.pihole.loadbalancer.server.port=80"
+      # Watchtower
+      - "com.centurylinklabs.watchtower.monitor-only=true"
 
 volumes:
   pihole:
