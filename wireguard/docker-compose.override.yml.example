@@ -1,4 +1,3 @@
-version: '3.5'
 services:
   wireguard:
     # since you should customize this for security reasons, better to leave
