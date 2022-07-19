@@ -3,19 +3,22 @@ services:
     image: traefik:v2.6
     hostname: raspberrypi
     restart: unless-stopped
+    depends_on:
+      - proxy
     ports:
       - "80:80"
       - "443:443"
       - "8080:8080"
     networks:
+      - default
       - reverse_proxy
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./config/configuration.yaml:/app/configuration.yaml:ro
       - data:/certificates
     command: 
       - --api.insecure=true
       - --providers.docker
+      - --providers.docker.endpoint=http://proxy:2375
       - --providers.docker.exposedByDefault=false
       - --providers.docker.network=reverse_proxy
       - --entryPoints.web.address=:80
@@ -28,7 +31,16 @@ services:
       - --certificatesresolvers.letsencrypt-staging.acme.storage=/certificates/acme-staging.json
       - --certificatesresolvers.letsencrypt-staging.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
       - --certificatesresolvers.letsencrypt-staging.acme.tlschallenge=true
-
+  proxy:
+    image: tecnativa/docker-socket-proxy
+    restart: unless-stopped
+    volumes:
+     - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - CONTAINERS=1
+      - SERVICES=1
+      - NETWORKS=1
+      - TASKS=1
 networks:
   reverse_proxy:
     external: true
