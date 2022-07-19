@@ -3,6 +3,8 @@ services:
     image: netdata/netdata
     hostname: ${NETDATA_DOMAIN:-netdata.localhost}
     restart: unless-stopped
+    depends_on:
+      - proxy
     networks:
       - default
       - reverse_proxy
