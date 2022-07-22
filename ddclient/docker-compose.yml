@@ -1,0 +1,8 @@
+services:
+  ddclient:
+    image: lscr.io/linuxserver/ddclient:latest
+    restart: unless-stopped
+    volumes:
+      - ./ddclient.conf:/config/ddclient.conf
+    env_file:
+      - .env
