@@ -3,6 +3,11 @@ services:
     image: ghcr.io/paperless-ngx/paperless-ngx:latest
     hostname: ${PAPERLESS_DOMAIN:-paperless.localhost}
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
     depends_on:
       - scheduler
     networks:
@@ -13,20 +18,19 @@ services:
       - media:/usr/src/paperless/media
       - ./export:/usr/src/paperless/export
       - ./consume:/usr/src/paperless/consume
-    env_file:
-      - .env
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
     labels:
       - "traefik.enable=true"
       # HTTP router
       - "traefik.http.routers.paperless.entrypoints=web"
       - "traefik.http.routers.paperless.rule=Host(`${PAPERLESS_DOMAIN:-paperless.localhost}`)"
-      - "traefik.http.routers.paperless.middlewares=local-service@file"
-      - "traefik.http.services.paperless.loadbalancer.server.port=8000"
+      - "traefik.http.routers.paperless.middlewares=force-https@file"
+      # HTTPS router
+      - "traefik.http.routers.paperless-https.entrypoints=websecure"
+      - "traefik.http.routers.paperless-https.rule=Host(`${PAPERLESS_DOMAIN:-paperless.localhost}`)"
+      - "traefik.http.routers.paperless-https.tls=true"
+      - "traefik.http.routers.paperless-https.tls.certresolver=letsencrypt-staging"
+    env_file:
+      - .env
     environment:
       PAPERLESS_REDIS: redis://scheduler:6379
   scheduler:
