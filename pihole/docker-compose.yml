@@ -1,6 +1,6 @@
 services:
   pihole:
-    image: pihole/pihole:2022.04
+    image: pihole/pihole:2022.07.1
     hostname: ${PIHOLE_DOMAIN:-pihole.localhost}
     restart: unless-stopped
     cap_add:
@@ -15,9 +15,6 @@ services:
     volumes:
       - pihole:/etc/pihole
       - dnsmasq:/etc/dnsmasq.d
-    env_file: .env
-    environment:
-      DNSMASQ_LISTENING: all
     labels:
       - "traefik.enable=true"
       # HTTP router
@@ -25,8 +22,9 @@ services:
       - "traefik.http.routers.pihole.rule=Host(`${PIHOLE_DOMAIN:-pihole.localhost}`)"
       - "traefik.http.routers.pihole.middlewares=local-service@file"
       - "traefik.http.services.pihole.loadbalancer.server.port=80"
-      # Watchtower
-      - "com.centurylinklabs.watchtower.monitor-only=true"
+    env_file: .env
+    environment:
+      DNSMASQ_LISTENING: all
 
 volumes:
   pihole:
