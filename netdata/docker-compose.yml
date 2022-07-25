@@ -1,6 +1,6 @@
 services:
   netdata:
-    image: netdata/netdata
+    image: netdata/netdata:v1.35.1
     hostname: ${NETDATA_DOMAIN:-netdata.localhost}
     restart: unless-stopped
     depends_on:
@@ -23,8 +23,6 @@ services:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
       - /etc/os-release:/host/etc/os-release:ro
-    environment:
-      - DOCKER_HOST=proxy:2375
     labels:
       - "traefik.enable=true"
       # HTTP router
@@ -32,8 +30,10 @@ services:
       - "traefik.http.routers.netdata.rule=Host(`${NETDATA_DOMAIN:-netdata.localhost}`)"
       - "traefik.http.routers.netdata.middlewares=local-service@file"
       - "traefik.http.services.netdata.loadbalancer.server.port=19999"
+    environment:
+      - DOCKER_HOST=proxy:2375
   proxy:
-    image: tecnativa/docker-socket-proxy
+    image: tecnativa/docker-socket-proxy:0.1.1
     restart: unless-stopped
     volumes:
      - /var/run/docker.sock:/var/run/docker.sock:ro

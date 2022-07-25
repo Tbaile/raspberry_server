@@ -1,96 +1,93 @@
 services:
-    web:
-        image: tbaile/lupus-web:develop
-        hostname: ${APP_DOMAIN:-lupusweb.localhost}
-        restart: unless-stopped
-        depends_on:
-            - app
-        healthcheck:
-            test: ["CMD", "curl", "--fail", "--silent", "--output", "/dev/null", "http://localhost"]
-            start_period: 10s
-        networks:
-            - default
-            - reverse_proxy
-        volumes:
-            - public:/var/www/html/public:ro
-            - storage:/var/www/html/storage
-        environment:
-            APP_DOMAIN: "${APP_DOMAIN:-lupusweb.localhost}"
-        labels:
-            - "traefik.enable=true"
-            # HTTP router
-            - "traefik.http.routers.lupusweb.entrypoints=web"
-            - "traefik.http.routers.lupusweb.rule=Host(`${APP_DOMAIN:-lupusweb.localhost}`)"
-            - "traefik.http.routers.lupusweb.middlewares=force-https@file"
-            # HTTPS router
-            - "traefik.http.routers.lupusweb-https.entrypoints=websecure"
-            - "traefik.http.routers.lupusweb-https.rule=Host(`${APP_DOMAIN:-lupusweb.localhost}`)"
-            - "traefik.http.routers.lupusweb-https.tls=true"
-            - "traefik.http.routers.lupusweb-https.tls.certresolver=letsencrypt"
-    app:
-        image: tbaile/lupus-app:develop
-        restart: unless-stopped
-        depends_on:
-            - database
-            - redis
-        healthcheck:
-            test: [ "CMD", "php-fpm-healthcheck" ]
-            start_period: 10s
-        volumes:
-            - public:/app/public
-            - storage:/var/www/html/storage
-        env_file:
-            - .env
-    scheduler:
-        image: tbaile/lupus-app:develop
-        restart: unless-stopped
-        depends_on:
-            - database
-            - redis
-        healthcheck:
-            test: [ "CMD-SHELL", "ps -ef | grep php | grep -v grep" ]
-            start_period: 10s
-        volumes:
-            - storage:/var/www/html/storage
-        env_file:
-            - .env
-        command: [ "scheduler" ]
-    queue:
-        image: tbaile/lupus-app:develop
-        restart: unless-stopped
-        depends_on:
-            - database
-            - redis
-        healthcheck:
-            test: [ "CMD-SHELL", "ps -ef | grep php | grep -v grep" ]
-            start_period: 10s
-        volumes:
-            - storage:/var/www/html/storage
-        env_file:
-            - .env
-        command: [ "queue" ]
-    database:
-        image: mariadb:10.6
-        restart: unless-stopped
-        healthcheck:
-            test: [ "CMD-SHELL", "mysqladmin --user=$DB_USERNAME --password=$DB_PASSWORD ping --silent" ]
-            start_period: 10s
-        volumes:
-            - database:/var/lib/mysql
-        environment:
-            MARIADB_RANDOM_ROOT_PASSWORD: "true"
-            MARIADB_DATABASE: "${DB_DATABASE}"
-            MARIADB_USER: "${DB_USERNAME}"
-            MARIADB_PASSWORD: "${DB_PASSWORD}"
-    redis:
-        image: redis
-        restart: unless-stopped
+  web:
+    image: tbaile/lupus-web:develop
+    hostname: ${APP_DOMAIN:-lupusweb.localhost}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "--silent", "--output", "/dev/null", "http://localhost"]
+      start_period: 10s
+    depends_on:
+      - app
+    networks:
+      - default
+      - reverse_proxy
+    volumes:
+      - public:/var/www/html/public:ro
+      - storage:/var/www/html/storage
+    labels:
+      - "traefik.enable=true"
+      # HTTP router
+      - "traefik.http.routers.lupusweb.entrypoints=web"
+      - "traefik.http.routers.lupusweb.rule=Host(`${APP_DOMAIN:-lupusweb.localhost}`)"
+      - "traefik.http.routers.lupusweb.middlewares=force-https@file"
+      # HTTPS router
+      - "traefik.http.routers.lupusweb-https.entrypoints=websecure"
+      - "traefik.http.routers.lupusweb-https.rule=Host(`${APP_DOMAIN:-lupusweb.localhost}`)"
+      - "traefik.http.routers.lupusweb-https.tls=true"
+      - "traefik.http.routers.lupusweb-https.tls.certresolver=letsencrypt"
+    environment:
+      APP_DOMAIN: "${APP_DOMAIN:-lupusweb.localhost}"
+  app:
+    image: tbaile/lupus-app:develop
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "php-fpm-healthcheck" ]
+      start_period: 10s
+    depends_on:
+      - database
+      - redis
+    volumes:
+      - public:/app/public
+      - storage:/var/www/html/storage
+    env_file: .env
+  scheduler:
+    image: tbaile/lupus-app:develop
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD-SHELL", "ps -ef | grep php | grep -v grep" ]
+      start_period: 10s
+    command: [ "scheduler" ]
+    depends_on:
+      - database
+      - redis
+    volumes:
+      - storage:/var/www/html/storage
+    env_file: .env
+  queue:
+    image: tbaile/lupus-app:develop
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD-SHELL", "ps -ef | grep php | grep -v grep" ]
+      start_period: 10s
+    command: [ "queue" ]
+    depends_on:
+      - database
+      - redis
+    volumes:
+      - storage:/var/www/html/storage
+    env_file: .env
+  database:
+    image: mariadb:10.8
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD-SHELL", "mysqladmin --user=$DB_USERNAME --password=$DB_PASSWORD ping --silent" ]
+      start_period: 10s
+    volumes:
+      - database:/var/lib/mysql
+    environment:
+      MARIADB_RANDOM_ROOT_PASSWORD: "true"
+      MARIADB_DATABASE: "${DB_DATABASE}"
+      MARIADB_USER: "${DB_USERNAME}"
+      MARIADB_PASSWORD: "${DB_PASSWORD}"
+  redis:
+    image: redis:7.0.4-alpine
+    restart: unless-stopped
 
 volumes:
-    storage:
-    public:
-    database:
+  storage:
+  public:
+  database:
 
 networks:
-    reverse_proxy:
-      external: true
+  reverse_proxy:
+    external: true

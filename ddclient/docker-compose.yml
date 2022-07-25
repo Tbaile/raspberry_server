@@ -1,12 +1,11 @@
 services:
   ddclient:
-    image: lscr.io/linuxserver/ddclient:latest
+    image: lscr.io/linuxserver/ddclient:3.9.1
     restart: unless-stopped
     configs:
       - source: conf
         target: /config/ddclient.conf
-    env_file:
-      - .env
+    env_file: .env
 
 configs:
   conf:

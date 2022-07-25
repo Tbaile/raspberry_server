@@ -1,14 +1,12 @@
 services:
   vaultwarden:
-    image: vaultwarden/server:latest
+    image: vaultwarden/server:1.25.1
     hostname: ${VAULTWARDEN_DOMAIN:-vaultwarden.localhost}
     restart: unless-stopped
     networks:
       - reverse_proxy
     volumes:
       - data:/data
-    env_file:
-      - .env
     labels:
       - "traefik.enable=true"
       # HTTP router
@@ -20,6 +18,7 @@ services:
       - "traefik.http.routers.vaultwarden-https.rule=Host(`${VAULTWARDEN_DOMAIN:-vaultwarden.localhost}`)"
       - "traefik.http.routers.vaultwarden-https.tls=true"
       - "traefik.http.routers.vaultwarden-https.tls.certresolver=letsencrypt"
+    env_file: .env
 
 volumes:
   data:

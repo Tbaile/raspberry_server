@@ -1,6 +1,6 @@
 services:
   traefik:
-    image: traefik:v2.6
+    image: traefik:v2.8.1
     hostname: raspberrypi
     restart: unless-stopped
     depends_on:
@@ -31,6 +31,7 @@ services:
       - --certificatesresolvers.letsencrypt-staging.acme.storage=/certificates/acme-staging.json
       - --certificatesresolvers.letsencrypt-staging.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
       - --certificatesresolvers.letsencrypt-staging.acme.tlschallenge=true
+
   proxy:
     image: tecnativa/docker-socket-proxy
     restart: unless-stopped
