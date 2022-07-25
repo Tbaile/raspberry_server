@@ -17,7 +17,7 @@ services:
       - "traefik.http.routers.vaultwarden-https.entrypoints=websecure"
       - "traefik.http.routers.vaultwarden-https.rule=Host(`${VAULTWARDEN_DOMAIN:-vaultwarden.localhost}`)"
       - "traefik.http.routers.vaultwarden-https.tls=true"
-      - "traefik.http.routers.vaultwarden-https.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.vaultwarden-https.tls.certresolver=cloudflare"
     env_file: .env
 
 volumes:
