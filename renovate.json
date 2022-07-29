@@ -6,5 +6,14 @@
   ],
   "patch": {
     "automerge": true
-  }
+  },
+  "packageRules": [
+    {
+      "matchPackageNames": [
+        "linuxserver/jellyfin",
+        "linuxserver/qbittorrent"
+      ],
+      "allowedVersions": "/^[0-9]+\\.[0-9]+\\.[0-9]+(\\.[0-9]+)?$/"
+    }
+  ]
 }
