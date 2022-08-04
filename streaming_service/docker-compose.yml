@@ -25,8 +25,8 @@ services:
       - default
       - reverse_proxy
     ports:
-      - "6881:6881"
-      - "6881:6881/udp"
+      - "${TRACKER_PORT:-6881}:${TRACKER_PORT:-6881}"
+      - "${TRACKER_PORT:-6881}:${TRACKER_PORT:-6881}/udp"
     volumes:
       - qbittorrent:/config
       - ${STORAGE_PATH:-./data}/downloads:/downloads
