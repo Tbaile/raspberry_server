@@ -2,6 +2,8 @@ services:
   wireguard:
     image: linuxserver/wireguard:1.0.20210914
     restart: unless-stopped
+    ports:
+      - "${SERVERPORT:-51820}:51820/udp"
     cap_add:
       - NET_ADMIN
       - SYS_MODULE
@@ -11,3 +13,5 @@ services:
       - ./config:/config
       - /lib/modules:/lib/modules
     env_file: .env
+    environment:
+      LOG_CONFS: false

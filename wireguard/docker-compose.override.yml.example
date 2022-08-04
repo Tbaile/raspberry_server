@@ -1,7 +1,0 @@
-services:
-  wireguard:
-    # since you should customize this for security reasons, better to leave
-    # this in a ingored file, so the user can customize this, remember to 
-    # open the port on the router
-    ports:
-      - 51820:51820/udp
