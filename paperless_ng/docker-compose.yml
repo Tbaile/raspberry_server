@@ -1,5 +1,5 @@
 services:
-  paperless:
+  app:
     image: ghcr.io/paperless-ngx/paperless-ngx:1.8.0
     hostname: ${PAPERLESS_DOMAIN:-paperless.localhost}
     restart: unless-stopped

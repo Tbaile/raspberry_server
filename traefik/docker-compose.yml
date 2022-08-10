@@ -1,5 +1,5 @@
 services:
-  traefik:
+  app:
     image: traefik:v2.8.1
     hostname: raspberrypi
     restart: unless-stopped
@@ -44,9 +44,10 @@ services:
       - SERVICES=1
       - NETWORKS=1
       - TASKS=1
-networks:
-  reverse_proxy:
-    external: true
 
 volumes:
   data:
+
+networks:
+  reverse_proxy:
+    external: true

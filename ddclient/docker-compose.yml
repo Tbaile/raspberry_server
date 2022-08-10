@@ -1,5 +1,6 @@
 services:
   ddclient:
+    container_name: ddclient
     image: linuxserver/ddclient:3.9.1
     restart: unless-stopped
     configs:

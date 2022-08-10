@@ -1,5 +1,6 @@
 services:
   portainer:
+    container_name: portainer
     image: portainer/portainer-ce:2.14.2-alpine
     hostname: ${PORTAINER_DOMAIN:-portainer.localhost}
     restart: unless-stopped

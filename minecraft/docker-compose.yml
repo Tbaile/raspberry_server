@@ -1,5 +1,6 @@
 services:
-  server:
+  minecraft:
+    container_name: minecraft-server
     image: itzg/minecraft-server:2022.10.0-java17
     restart: unless-stopped
     ports:
