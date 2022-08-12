@@ -1,0 +1,104 @@
+services:
+  redis:
+    image: redis:6.2.7-alpine
+    healthcheck:
+      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+    restart: unless-stopped
+  database:
+    image: mariadb:10.6.8
+    healthcheck:
+      test: [ "CMD", "mysql", "-u${DB_USERNAME}", "-p${DB_PASSWORD}", "-e", "SELECT 1" ]
+    restart: unless-stopped
+    volumes:
+      - database:/var/lib/mysql
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: true
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+  setup:
+    image: tbaile/lupus-app:develop
+    depends_on:
+      - database
+      - redis
+    volumes:
+      - public:/app/public
+      - storage:/var/www/html/storage
+    env_file:
+      - .env
+    environment:
+      ROLE: "setup"
+  app:
+    image: tbaile/lupus-app:develop
+    healthcheck:
+      test: [ "CMD", "php-fpm-healthcheck" ]
+    restart: unless-stopped
+    depends_on:
+      setup:
+        condition: service_completed_successfully
+    volumes:
+      - public:/app/public
+      - storage:/var/www/html/storage
+    env_file:
+      - .env
+  scheduler:
+    image: tbaile/lupus-app:develop
+    restart: unless-stopped
+    depends_on:
+      setup:
+        condition: service_completed_successfully
+    volumes:
+      - public:/app/public
+      - storage:/var/www/html/storage
+    env_file:
+      - .env
+    environment:
+      ROLE: "scheduler"
+  queue:
+    image: tbaile/lupus-app:develop
+    restart: unless-stopped
+    depends_on:
+      setup:
+        condition: service_completed_successfully
+    volumes:
+      - public:/app/public
+      - storage:/var/www/html/storage
+    env_file:
+      - .env
+    environment:
+      ROLE: "queue"
+  web:
+    image: tbaile/lupus-web:develop
+    healthcheck:
+      test: [ "CMD", "curl", "--fail", "--silent", "--output", "/dev/null", "http://localhost" ]
+    restart: unless-stopped
+    networks:
+      - default
+      - reverse_proxy
+    volumes:
+      - public:/var/www/html/public:ro
+      - storage:/var/www/html/storage
+    labels:
+      - "traefik.enable=true"
+      # HTTP router
+      - "traefik.http.routers.lupus-api.entrypoints=web"
+      - "traefik.http.routers.lupus-api.rule=Host(`${APP_DOMAIN:-lupus-api.localhost}`)"
+      - "traefik.http.routers.lupus-api.middlewares=force-https@file"
+      # HTTPS router
+      - "traefik.http.routers.lupus-api-https.entrypoints=websecure"
+      - "traefik.http.routers.lupus-api-https.rule=Host(`${APP_DOMAIN:-lupus-api.localhost}`)"
+      - "traefik.http.routers.lupus-api-https.tls=true"
+      - "traefik.http.routers.lupus-api-https.tls.certresolver=cloudflare"
+    environment:
+      APP_DOMAIN: ${APP_DOMAIN}
+      FPM_URL: app
+      FPM_PORT: 9000
+
+volumes:
+  database:
+  public:
+  storage:
+
+networks:
+  reverse_proxy:
+    external: true
