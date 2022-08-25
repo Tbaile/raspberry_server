@@ -44,13 +44,13 @@ services:
       - CONTAINERS=1
 
 volumes:
-  config:
-  lib:
-  cache:
+  config: {}
+  lib: {}
+  cache: {}
 
 configs:
   alarms:
-    file: ./docker-compose.yml
+    file: ./netdata.conf
   conf:
     file: ./health_alarm_notify.conf
 
