@@ -115,11 +115,6 @@ services:
     networks:
       - default
       - reverse_proxy
-    devices:
-      - /dev/vchiq:/dev/vchiq
-      - /dev/video10:/dev/video10
-      - /dev/video11:/dev/video11
-      - /dev/video12:/dev/video12
     volumes:
       - ${STORAGE_PATH:-./data}/media:/mnt/media
       - jellyfin:/config
