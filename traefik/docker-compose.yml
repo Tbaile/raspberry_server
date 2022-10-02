@@ -1,6 +1,6 @@
 services:
   app:
-    image: traefik:v2.8.1
+    image: traefik:v2.8.8
     hostname: raspberrypi
     restart: unless-stopped
     depends_on:
