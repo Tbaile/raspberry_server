@@ -31,6 +31,12 @@
         "linuxserver/jellyfin"
       ],
       "allowedVersions": "<= 10"
+    },
+    {
+      "groupName": "streaming_service",
+      "matchFiles": [
+        "streaming_service/docker-compose.yml"
+      ]
     }
   ]
 }
