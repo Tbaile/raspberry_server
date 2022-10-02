@@ -1,6 +1,6 @@
 services:
   prowlarr:
-    image: linuxserver/prowlarr:0.4.6-nightly
+    image: linuxserver/prowlarr:0.4.7-nightly
     hostname: ${PROWLARR_DOMAIN:-prowlarr.localhost}
     restart: unless-stopped
     networks:
@@ -18,7 +18,7 @@ services:
     env_file: .env
 
   qbittorrent:
-    image: linuxserver/qbittorrent:4.4.4
+    image: linuxserver/qbittorrent:4.4.5
     hostname: ${QBITTORRENT_DOMAIN:-qbittorrent.localhost}
     restart: unless-stopped
     networks:
@@ -40,7 +40,7 @@ services:
     env_file: .env
 
   sonarr:
-    image: linuxserver/sonarr:3.0.8
+    image: linuxserver/sonarr:3.0.9
     hostname: ${SONARR_DOMAIN:-sonarr.localhost}
     restart: unless-stopped
     depends_on:
