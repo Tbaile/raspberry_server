@@ -10,10 +10,27 @@
   "packageRules": [
     {
       "matchPackageNames": [
-        "linuxserver/jellyfin",
+        "mariadb"
+      ],
+      "allowedVersions": "<= 10.6"
+    },
+    {
+      "matchPackageNames": [
+        "redis"
+      ],
+      "allowedVersions": "<= 6.2"
+    },
+    {
+      "matchPackageNames": [
         "linuxserver/qbittorrent"
       ],
-      "allowedVersions": "/^[0-9]+\\.[0-9]+\\.[0-9]+(\\.[0-9]+)?$/"
+      "allowedVersions": "<= 4"
+    },
+    {
+      "matchPackageNames": [
+        "linuxserver/jellyfin"
+      ],
+      "allowedVersions": "<= 10"
     }
   ]
 }
