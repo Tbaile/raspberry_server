@@ -1,6 +1,6 @@
 services:
   prowlarr:
-    image: linuxserver/prowlarr:0.4.4-nightly
+    image: linuxserver/prowlarr:0.4.7-nightly
     hostname: ${PROWLARR_DOMAIN:-prowlarr.localhost}
     restart: unless-stopped
     networks:
