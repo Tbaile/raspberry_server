@@ -1,6 +1,6 @@
 services:
   prowlarr:
-    image: linuxserver/prowlarr:0.4.4-nightly
+    image: linuxserver/prowlarr:0.4.7-nightly
     hostname: ${PROWLARR_DOMAIN:-prowlarr.localhost}
     restart: unless-stopped
     networks:
@@ -18,7 +18,7 @@ services:
     env_file: .env
 
   qbittorrent:
-    image: linuxserver/qbittorrent:4.4.3
+    image: linuxserver/qbittorrent:4.4.5
     hostname: ${QBITTORRENT_DOMAIN:-qbittorrent.localhost}
     restart: unless-stopped
     networks:
@@ -40,7 +40,7 @@ services:
     env_file: .env
 
   sonarr:
-    image: linuxserver/sonarr:3.0.8
+    image: linuxserver/sonarr:3.0.9
     hostname: ${SONARR_DOMAIN:-sonarr.localhost}
     restart: unless-stopped
     depends_on:
@@ -63,7 +63,7 @@ services:
     env_file: .env
 
   radarr:
-    image: linuxserver/radarr:4.1.0
+    image: linuxserver/radarr:4.2.4
     hostname: ${RADARR_DOMAIN:-radarr.localhost}
     restart: unless-stopped
     depends_on:
@@ -109,7 +109,7 @@ services:
     env_file: .env
 
   jellyfin:
-    image: linuxserver/jellyfin:10.8.4
+    image: linuxserver/jellyfin:10.8.5
     hostname: ${JELLYFIN_DOMAIN:-jellyfin.localhost}
     restart: unless-stopped
     networks:
