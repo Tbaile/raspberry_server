@@ -97,8 +97,8 @@ services:
       - reverse_proxy
     volumes:
       - bazarr:/config
-      - ${STORAGE_PATH:-./data}/media/movies:/mnt/data/media/movies
-      - ${STORAGE_PATH:-./data}/media/tv:/mnt/data/media/tv
+      - ${STORAGE_PATH:-./data}/media/movies:/movies
+      - ${STORAGE_PATH:-./data}/media/tv:/tv
     labels:
       - "traefik.enable=true"
       # HTTP router
