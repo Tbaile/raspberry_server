@@ -1,7 +1,7 @@
 services:
   pihole:
     container_name: pihole
-    image: pihole/pihole:2022.07.1
+    image: pihole/pihole:2022.09.4
     hostname: ${PIHOLE_DOMAIN:-pihole.localhost}
     restart: unless-stopped
     cap_add:
