@@ -1,6 +1,6 @@
 services:
   app:
-    image: ghcr.io/paperless-ngx/paperless-ngx:1.8.0
+    image: ghcr.io/paperless-ngx/paperless-ngx:1.9.2
     hostname: ${PAPERLESS_DOMAIN:-paperless.localhost}
     restart: unless-stopped
     healthcheck:
@@ -34,7 +34,7 @@ services:
     environment:
       PAPERLESS_REDIS: redis://scheduler:6379
   scheduler:
-    image: redis
+    image: redis:6.2.7-alpine
     restart: unless-stopped    
 
 volumes:
