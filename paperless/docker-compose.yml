@@ -34,8 +34,8 @@ services:
     environment:
       PAPERLESS_REDIS: redis://scheduler:6379
   scheduler:
-    image: redis:6.2.7-alpine
-    restart: unless-stopped    
+    image: redis:7.0.5-alpine
+    restart: unless-stopped
 
 volumes:
   data:
