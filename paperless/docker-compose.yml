@@ -1,6 +1,6 @@
 services:
   app:
-    image: ghcr.io/paperless-ngx/paperless-ngx:1.9.2
+    image: ghcr.io/paperless-ngx/paperless-ngx:1.12.2
     hostname: ${PAPERLESS_DOMAIN:-paperless.localhost}
     restart: unless-stopped
     healthcheck:
