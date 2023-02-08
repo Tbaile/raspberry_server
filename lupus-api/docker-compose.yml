@@ -1,11 +1,11 @@
 services:
   redis:
-    image: redis:6.2.7-alpine
+    image: redis:6.2.10-alpine
     healthcheck:
       test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
     restart: unless-stopped
   database:
-    image: mariadb:10.6.10
+    image: mariadb:10.6.12
     healthcheck:
       test: [ "CMD", "mysql", "-ulupusapi", "-plupusapi", "-e", "SELECT 1" ]
     restart: unless-stopped
