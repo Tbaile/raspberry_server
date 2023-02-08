@@ -2,65 +2,9 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:base",
-    "schedule:monthly"
+    ":prHourlyLimitNone"
   ],
   "patch": {
     "automerge": true
-  },
-  "packageRules": [
-    {
-      "matchPackageNames": [
-        "mariadb"
-      ],
-      "allowedVersions": "<= 10.6"
-    },
-    {
-      "matchPackageNames": [
-        "redis"
-      ],
-      "allowedVersions": "<= 6.2"
-    },
-    {
-      "matchPackageNames": [
-        "linuxserver/qbittorrent"
-      ],
-      "allowedVersions": "<= 4"
-    },
-    {
-      "matchPackageNames": [
-        "linuxserver/jellyfin"
-      ],
-      "allowedVersions": "<= 10"
-    },
-    {
-      "groupName": "Lupus API",
-      "matchFiles": [
-        "lupus-api/docker-compose.yml"
-      ]
-    },
-    {
-      "groupName": "Netdata",
-      "matchFiles": [
-        "netdata/docker-compose.yml"
-      ]
-    },
-    {
-      "groupName": "Paperless",
-      "matchFiles": [
-        "paperless/docker-compose.yml"
-      ]
-    },
-    {
-      "groupName": "Streaming Service",
-      "matchFiles": [
-        "streaming_service/docker-compose.yml"
-      ]
-    },
-    {
-      "groupName": "Traefik",
-      "matchFiles": [
-        "traefik/docker-compose.yml"
-      ]
-    }
-  ]
+  }
 }
