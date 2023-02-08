@@ -1,6 +1,6 @@
 services:
   prowlarr:
-    image: linuxserver/prowlarr:0.4.7-nightly
+    image: linuxserver/prowlarr:0.4.11-nightly
     hostname: ${PROWLARR_DOMAIN:-prowlarr.localhost}
     restart: unless-stopped
     networks:
@@ -60,7 +60,7 @@ services:
     env_file: .env
 
   radarr:
-    image: linuxserver/radarr:4.2.4
+    image: linuxserver/radarr:4.3.2
     hostname: ${RADARR_DOMAIN:-radarr.localhost}
     restart: unless-stopped
     depends_on:
@@ -83,7 +83,7 @@ services:
     env_file: .env
 
   bazarr:
-    image: linuxserver/bazarr:1.1.1
+    image: linuxserver/bazarr:1.1.4
     hostname: ${BAZARR_DOMAIN:-bazarr.localhost}
     restart: unless-stopped
     depends_on:
@@ -106,7 +106,7 @@ services:
     env_file: .env
 
   jellyfin:
-    image: linuxserver/jellyfin:10.8.5
+    image: linuxserver/jellyfin:10.8.9
     hostname: ${JELLYFIN_DOMAIN:-jellyfin.localhost}
     restart: unless-stopped
     networks:
