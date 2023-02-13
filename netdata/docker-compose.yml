@@ -1,6 +1,6 @@
 services:
   app:
-    image: netdata/netdata:v1.36.1
+    image: netdata/netdata:v1.38.1
     hostname: ${NETDATA_DOMAIN:-netdata.localhost}
     restart: unless-stopped
     depends_on:
