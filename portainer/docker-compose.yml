@@ -1,7 +1,7 @@
 services:
   portainer:
     container_name: portainer
-    image: portainer/portainer-ce:2.15.1-alpine
+    image: portainer/portainer-ce:2.17.1-alpine
     hostname: ${PORTAINER_DOMAIN:-portainer.localhost}
     restart: unless-stopped
     networks:
