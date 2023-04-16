@@ -37,7 +37,7 @@ services:
     env_file: .env
 
   sonarr:
-    image: linuxserver/sonarr:3.0.9
+    image: linuxserver/sonarr:3.0.10
     hostname: ${SONARR_DOMAIN:-sonarr.localhost}
     restart: unless-stopped
     depends_on:
