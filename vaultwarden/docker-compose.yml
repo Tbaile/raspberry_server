@@ -1,7 +1,7 @@
 services:
   vaultwarden:
     container_name: vaultwarden
-    image: vaultwarden/server:1.25.2
+    image: vaultwarden/server:1.28.1
     hostname: ${VAULTWARDEN_DOMAIN:-vaultwarden.localhost}
     restart: unless-stopped
     networks:
