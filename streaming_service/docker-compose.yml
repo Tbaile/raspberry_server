@@ -60,7 +60,7 @@ services:
     env_file: .env
 
   radarr:
-    image: linuxserver/radarr:4.2.4
+    image: linuxserver/radarr:4.7.5
     hostname: ${RADARR_DOMAIN:-radarr.localhost}
     restart: unless-stopped
     depends_on:
