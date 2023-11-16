@@ -5,7 +5,7 @@ services:
       test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
     restart: unless-stopped
   database:
-    image: mariadb:10.6.10
+    image: mariadb:10.11.6
     healthcheck:
       test: [ "CMD", "mysql", "-ulupusapi", "-plupusapi", "-e", "SELECT 1" ]
     restart: unless-stopped
