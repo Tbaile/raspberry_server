@@ -106,7 +106,7 @@ services:
     env_file: .env
 
   jellyfin:
-    image: linuxserver/jellyfin:10.8.5
+    image: linuxserver/jellyfin:10.8.13
     hostname: ${JELLYFIN_DOMAIN:-jellyfin.localhost}
     restart: unless-stopped
     networks:
